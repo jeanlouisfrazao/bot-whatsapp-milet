@@ -8,9 +8,9 @@ app.use(express.json());
 // =============================
 // CONFIGURAÇÕES
 // =============================
-const TOKEN = "SEU_TOKEN_DA_INSTANCIA";
-const INSTANCE = "SEU_ID_DA_INSTANCIA";
-const CLIENT_TOKEN = "SEU_CLIENT_TOKEN_DA_CONTA";
+const TOKEN = "9C9FF1025FEA65962432BEB6";
+const INSTANCE = "3F13882437AD822EC0D1BE4FDF68D33E";
+const CLIENT_TOKEN = "Ff8c308284ffb498e9a8bf1c62663eae1S";
 
 // OpenAI via variável do Railway
 const openai = new OpenAI({
