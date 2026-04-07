@@ -28,7 +28,8 @@ Trabalhamos com marcas referência no mercado de construção como Cetilux, Colo
 Pode ficar à vontade pra me dizer seu nome e o que você precisa, vou te ajudar no primeiro momento e te passar para um atendente assim que finalizarmos 👍:
 
 1 - Quero comprar
-2 - Pós venda`;
+2 - Pós venda
+3 - Catálogo`;
 }
 
 function normalizarTexto(texto) {
@@ -48,6 +49,10 @@ function ehOpcaoComprar(texto) {
 function ehOpcaoPosVenda(texto) {
     const t = normalizarTexto(texto);
     return t === "2" || t.includes("pos venda") || t.includes("pós venda") || t === "pos-venda" || t === "pós-venda";
+}
+function ehOpcaoCatalogo(texto) {
+    const t = normalizarTexto(texto);
+    return t === "3" || t.includes("catalogo") || t.includes("catálogo");
 }
 
 // =========================
@@ -98,17 +103,24 @@ app.post("/webhook", async (req, res) => {
         }
 
         // MENU PRINCIPAL
-        else if (estados[numero] === "menu") {
-            if (ehOpcaoComprar(mensagem)) {
-                estados[numero] = "aguardando_dados_atendente";
-                resposta = "Para melhor atender você, informe seu nome e o motivo do seu contato para nosso atendente.";
-            } else if (ehOpcaoPosVenda(mensagem)) {
-                estados[numero] = "aguardando_dados_atendente";
-                resposta = "Para melhor atender você, informe seu nome e o motivo do seu contato para nosso atendente.";
-            } else {
-                resposta = menuPrincipal();
-            }
-        }
+       else if (estados[numero] === "menu") {
+    if (ehOpcaoComprar(mensagem)) {
+        estados[numero] = "aguardando_dados_atendente";
+        resposta = "Para melhor atender você, informe seu nome e o motivo do seu contato para nosso atendente.";
+    } else if (ehOpcaoPosVenda(mensagem)) {
+        estados[numero] = "aguardando_dados_atendente";
+        resposta = "Para melhor atender você, informe seu nome e o motivo do seu contato para nosso atendente.";
+    } else if (ehOpcaoCatalogo(mensagem)) {
+        resposta = `Claro! 📁
+
+Segue nosso catálogo para download:
+https://drive.google.com/drive/folders/1C4Cp1fl-uWhF0iq9BO3fBH81AUUvUAIV?usp=sharing
+
+Se precisar de ajuda para encontrar o produto ideal, me chama aqui 👍`;
+    } else {
+        resposta = menuPrincipal();
+    }
+}
 
         // COLETA DE DADOS PARA ATENDENTE
         else if (estados[numero] === "aguardando_dados_atendente") {
