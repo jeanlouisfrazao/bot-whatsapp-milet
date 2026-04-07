@@ -103,13 +103,17 @@ app.post("/webhook", async (req, res) => {
         }
 
         // MENU PRINCIPAL
-       else if (estados[numero] === "menu") {
+      else if (estados[numero] === "menu") {
     if (ehOpcaoComprar(mensagem)) {
-        estados[numero] = "aguardando_dados_atendente";
-        resposta = "Para melhor atender você, informe seu nome e o motivo do seu contato para nosso atendente.";
+        resposta = `Perfeito! 👍
+
+Para continuar seu atendimento de compra, fale com nosso atendente por aqui:
+https://wa.me/557998001600`;
     } else if (ehOpcaoPosVenda(mensagem)) {
-        estados[numero] = "aguardando_dados_atendente";
-        resposta = "Para melhor atender você, informe seu nome e o motivo do seu contato para nosso atendente.";
+        resposta = `Perfeito! 👍
+
+Para continuar seu atendimento de pós-venda, fale com nosso atendente por aqui:
+http://wa.me/5579998443474`;
     } else if (ehOpcaoCatalogo(mensagem)) {
         resposta = `Claro! 📁
 
