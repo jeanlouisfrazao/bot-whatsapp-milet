@@ -6,6 +6,7 @@ app.use(express.json());
 
 const TOKEN = "9C9FF1025FEA65962432BEB6";
 const INSTANCE = "3F13882437AD822EC0D1BE4FDF68D33E";
+const CLIENT_TOKEN = "Ff8c308284ffb498e9a8bf1c62663eae1S";
 
 app.get("/", (req, res) => {
     res.send("Bot online");
@@ -22,15 +23,16 @@ app.post("/webhook", async (req, res) => {
             req.body.text ||
             "";
 
-        const numero =
+        let numero =
             req.body.phone ||
             req.body.from ||
             req.body.senderPhone ||
             req.body.chatId ||
             "";
 
-        console.log("Mensagem extraída:", mensagem);
-        console.log("Número extraído:", numero);
+        if (typeof numero === "string") {
+            numero = numero.replace("@c.us", "").replace("@s.whatsapp.net", "");
+        }
 
         let resposta = "Digite:\n1 - Comprar\n2 - Revender";
 
@@ -41,21 +43,25 @@ app.post("/webhook", async (req, res) => {
         }
 
         if (!numero) {
-            console.log("Nenhum número encontrado no payload.");
             return res.sendStatus(200);
         }
 
         const url = `https://api.z-api.io/instances/${INSTANCE}/token/${TOKEN}/send-text`;
 
-        console.log("Enviando resposta para:", numero);
-
-        const retorno = await axios.post(url, {
-            phone: numero,
-            message: resposta
-        });
+        const retorno = await axios.post(
+            url,
+            {
+                phone: numero,
+                message: resposta
+            },
+            {
+                headers: {
+                    "Client-Token": CLIENT_TOKEN
+                }
+            }
+        );
 
         console.log("Resposta da Z-API:", retorno.data);
-
         res.sendStatus(200);
     } catch (error) {
         console.error("ERRO COMPLETO:");
