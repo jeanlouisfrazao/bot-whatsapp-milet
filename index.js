@@ -50,6 +50,7 @@ function ehOpcaoPosVenda(texto) {
     const t = normalizarTexto(texto);
     return t === "2" || t.includes("pos venda") || t.includes("pós venda") || t === "pos-venda" || t === "pós-venda";
 }
+
 function ehOpcaoCatalogo(texto) {
     const t = normalizarTexto(texto);
     return t === "3" || t.includes("catalogo") || t.includes("catálogo");
@@ -96,59 +97,43 @@ app.post("/webhook", async (req, res) => {
             estados[numero] = "menu";
         }
 
-        // Reinicia para menu se a pessoa mandar "menu" ou "oi"
         if (["menu", "oi", "ola", "olá", "inicio", "início"].includes(mensagemNormalizada)) {
+            estados[numero] = "menu";
+            resposta = menuPrincipal();
+        } else if (estados[numero] === "menu") {
+            if (ehOpcaoComprar(mensagem)) {
+                resposta = `Perfeito! 👍
+
+Vou te direcionar agora para nosso especialista em compras.
+
+👉 Clique aqui para continuar:
+https://wa.me/557998001600?text=Olá,%20vim%20pelo%20atendimento%20da%20Milet%20e%20quero%20comprar
+
+Se não abrir automaticamente, é só clicar no link acima 👆`;
+            } else if (ehOpcaoPosVenda(mensagem)) {
+                resposta = `Perfeito! 👍
+
+Vou te direcionar agora para nosso suporte de pós-venda.
+
+👉 Clique aqui para continuar:
+https://wa.me/5579998443474?text=Olá,%20vim%20pelo%20atendimento%20da%20Milet%20e%20preciso%20de%20pós%20venda
+
+Se não abrir automaticamente, é só clicar no link acima 👆`;
+            } else if (ehOpcaoCatalogo(mensagem)) {
+                resposta = `Claro! 📁
+
+Segue nosso catálogo para download:
+https://drive.google.com/drive/folders/1C4Cp1fl-uWhF0iq9BO3fBH81AUUvUAIV?usp=sharing
+
+Se precisar de ajuda para encontrar o produto ideal, me chama aqui 👍`;
+            } else {
+                resposta = menuPrincipal();
+            }
+        } else {
             estados[numero] = "menu";
             resposta = menuPrincipal();
         }
 
-        // MENU PRINCIPAL
-      else if (estados[numero] === "menu") {
-    if (ehOpcaoComprar(mensagem)) {
-        resposta = `Perfeito! 👍
-
-Para continuar seu atendimento de compra, fale com nosso atendente por aqui:
-https://wa.me/557998001600`;
-    } else if (ehOpcaoPosVenda(mensagem)) {
-        resposta = `Perfeito! 👍
-
-Para continuar seu atendimento de pós-venda, fale com nosso atendente por aqui:
-http://wa.me/5579998443474`;
-    } else if (ehOpcaoCatalogo(mensagem)) {
-        resposta = `Claro! 📁
-
-Segue nosso catálogo para download:
-https://drive.google.com/drive/folders/1C4Cp1fl-uWhF0iq9BO3fBH81AUUvUAIV?usp=sharing
-
-Se precisar de ajuda para encontrar o produto ideal, me chama aqui 👍`;
-    } else {
-        resposta = menuPrincipal();
-    }
-}
-
-        // COLETA DE DADOS PARA ATENDENTE
-     else if (estados[numero] === "menu") {
-    if (ehOpcaoComprar(mensagem)) {
-        resposta = `Perfeito! 👍
-
-Para continuar seu atendimento de compra, fale com nosso atendente por aqui:
-https://wa.me/557998001600`;
-    } else if (ehOpcaoPosVenda(mensagem)) {
-        resposta = `Perfeito! 👍
-
-Para continuar seu atendimento de pós-venda, fale com nosso atendente por aqui:
-http://wa.me/5579998443474`;
-    } else if (ehOpcaoCatalogo(mensagem)) {
-        resposta = `Claro! 📁
-
-Segue nosso catálogo para download:
-https://drive.google.com/drive/folders/1C4Cp1fl-uWhF0iq9BO3fBH81AUUvUAIV?usp=sharing
-
-Se precisar de ajuda para encontrar o produto ideal, me chama aqui 👍`;
-    } else {
-        resposta = menuPrincipal();
-    }
-}
         const url = `https://api.z-api.io/instances/${INSTANCE}/token/${TOKEN}/send-text`;
 
         await axios.post(
