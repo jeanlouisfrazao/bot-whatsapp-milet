@@ -123,28 +123,28 @@ Se precisar de ajuda para encontrar o produto ideal, me chama aqui 👍`;
 }
 
         // COLETA DE DADOS PARA ATENDENTE
-        else if (estados[numero] === "aguardando_dados_atendente") {
-            estados[numero] = "finalizado_atendente";
-            resposta = `Perfeito! 👍
+     else if (estados[numero] === "menu") {
+    if (ehOpcaoComprar(mensagem)) {
+        resposta = `Perfeito! 👍
 
-Recebi suas informações e vou encaminhar para nosso atendente.
+Para continuar seu atendimento de compra, fale com nosso atendente por aqui:
+https://wa.me/557998001600`;
+    } else if (ehOpcaoPosVenda(mensagem)) {
+        resposta = `Perfeito! 👍
 
-Em breve você será atendido. Se precisar voltar ao início, digite: menu`;
-        }
+Para continuar seu atendimento de pós-venda, fale com nosso atendente por aqui:
+http://wa.me/5579998443474`;
+    } else if (ehOpcaoCatalogo(mensagem)) {
+        resposta = `Claro! 📁
 
-        // ESTADO FINAL
-        else if (estados[numero] === "finalizado_atendente") {
-            resposta = `Seu atendimento já foi encaminhado 👍
+Segue nosso catálogo para download:
+https://drive.google.com/drive/folders/1C4Cp1fl-uWhF0iq9BO3fBH81AUUvUAIV?usp=sharing
 
-Se quiser voltar ao início, digite: menu`;
-        }
-
-        // FALLBACK
-        else {
-            estados[numero] = "menu";
-            resposta = menuPrincipal();
-        }
-
+Se precisar de ajuda para encontrar o produto ideal, me chama aqui 👍`;
+    } else {
+        resposta = menuPrincipal();
+    }
+}
         const url = `https://api.z-api.io/instances/${INSTANCE}/token/${TOKEN}/send-text`;
 
         await axios.post(
