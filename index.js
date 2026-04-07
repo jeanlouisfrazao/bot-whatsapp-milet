@@ -107,7 +107,7 @@ app.post("/webhook", async (req, res) => {
 Vou te direcionar agora para nosso especialista em compras.
 
 👉 Clique aqui para continuar:
-https://wa.me/557998001600?text=Olá,%20vim%20pelo%20atendimento%20da%20Milet%20e%20quero%20comprar
+https://cur.to/JKjS
 
 Se não abrir automaticamente, é só clicar no link acima 👆`;
             } else if (ehOpcaoPosVenda(mensagem)) {
@@ -116,7 +116,7 @@ Se não abrir automaticamente, é só clicar no link acima 👆`;
 Vou te direcionar agora para nosso suporte de pós-venda.
 
 👉 Clique aqui para continuar:
-https://wa.me/5579998443474?text=Olá,%20vim%20pelo%20atendimento%20da%20Milet%20e%20preciso%20de%20pós%20venda
+https://cur.to/vFNZ
 
 Se não abrir automaticamente, é só clicar no link acima 👆`;
             } else if (ehOpcaoCatalogo(mensagem)) {
